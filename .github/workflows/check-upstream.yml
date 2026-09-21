@@ -1,0 +1,49 @@
+name: Check Keycloak upstream image
+
+on:
+  schedule:
+    - cron: '17 3 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    env:
+      KEYCLOAK_MAJOR: '26'
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Find latest stable Keycloak release
+        id: release
+        run: |
+          set -eu
+          current="$(sed -n 's/^ARG KEYCLOAK_VERSION=//p' Dockerfile)"
+          latest="$(curl --fail --silent --show-error \
+            'https://quay.io/api/v1/repository/keycloak/keycloak/tag/?limit=100&onlyActiveTags=true' \
+            | jq -r '.tags[].name' \
+            | grep -E "^${KEYCLOAK_MAJOR}\\.[0-9]+\\.[0-9]+$" \
+            | sort -V | tail -n 1)"
+          test -n "$latest"
+          echo "Current: $current"
+          echo "Latest:  $latest"
+          if [ "$current" != "$latest" ]; then
+            sed -i "s/^ARG KEYCLOAK_VERSION=.*/ARG KEYCLOAK_VERSION=$latest/" Dockerfile
+            echo "updated=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Open update pull request
+        if: steps.release.outputs.updated == 'true'
+        uses: peter-evans/create-pull-request@v7
+        with:
+          commit-message: 'chore: update Keycloak base image'
+          title: 'chore: update Keycloak base image'
+          body: |
+            A new stable Keycloak `${{ env.KEYCLOAK_MAJOR }}.x` image was found on Quay.
+
+            The image build and Cosign verification run in the PR workflow.
+          branch: automation/keycloak-upstream
+          delete-branch: true
