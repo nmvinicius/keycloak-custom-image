@@ -31,9 +31,8 @@ jobs:
           java-version: '21'
           cache: maven
 
-      - uses: stCarlsen/setup-maven@v5
-        with:
-          maven-version: 3.9.9
+      - name: Install Maven
+        run: sudo apt-get update && sudo apt-get install --yes maven
 
       - name: Build Keycloakify theme
         working-directory: theme
