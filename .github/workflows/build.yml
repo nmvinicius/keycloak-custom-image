@@ -19,6 +19,26 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: theme/package-lock.json
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+
+      - uses: stCarlsen/setup-maven@v5
+        with:
+          maven-version: 3.9.9
+
+      - name: Build Keycloakify theme
+        working-directory: theme
+        run: npm ci && npm run build-keycloak-theme
+
       - uses: docker/login-action@v3
         with:
           registry: ghcr.io

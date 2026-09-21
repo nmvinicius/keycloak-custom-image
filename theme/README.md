@@ -1,20 +1,13 @@
 # Theme Keycloakify
 
-Este diretório deve conter um projeto gerado pelo Keycloakify. O build precisa
-produzir um JAR em `dist_keycloak/`, que será incluído na imagem customizada.
-
-Para criar o projeto inicial:
-
-```bash
-cd keycloak/image/theme
-npm create keycloakify@latest
-```
-
-Depois, construa o theme:
+Este diretório contém o starter oficial do Keycloakify. Para instalar as
+dependências e gerar o JAR:
 
 ```bash
 npm install
-npm run build
+npm run build-keycloak-theme
 ```
 
-O JAR final ficará em `dist_keycloak/`.
+`npm run build` sozinho gera apenas os arquivos web. O comando
+`build-keycloak-theme` também executa o compilador Keycloakify e grava o JAR em
+`dist_keycloak/`.
