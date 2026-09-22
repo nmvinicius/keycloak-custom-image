@@ -1,8 +1,9 @@
 # Keycloak custom image
 
-Imagem-base para o Keycloak Operator. Ela não embute providers: no pod, um
-`initContainer` copia JARs fornecidos por ConfigMap/Secret para um volume
-temporário, e `entrypoint.sh` executa `kc.sh build` antes de iniciar o servidor.
+Imagem para o Keycloak Operator. O JAR gerado pelo Keycloakify é construído e
+embutido em `/opt/keycloak/providers`. No pod, um `initContainer` ainda pode
+copiar JARs pequenos fornecidos por ConfigMap/Secret para extensões adicionais;
+`entrypoint.sh` executa `kc.sh build` antes de iniciar o servidor.
 
 ## Build local
 
