@@ -5,6 +5,11 @@ embutido em `/opt/keycloak/providers`. No pod, um `initContainer` ainda pode
 copiar JARs pequenos fornecidos por ConfigMap/Secret para extensões adicionais;
 `entrypoint.sh` executa `kc.sh build` antes de iniciar o servidor.
 
+O `keycloak-redis-cache` (datastore Redis/Valkey, alpha) também é embutido: o
+Dockerfile compila o fat jar a partir do repositório (o commit é fixado pelo ARG
+`REDIS_CACHE_REF`) e o copia para `/opt/keycloak/providers`. Para atualizar a
+extensão, altere `REDIS_CACHE_REF` no `Dockerfile`.
+
 ## Build local
 
 ```bash
