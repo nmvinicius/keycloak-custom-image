@@ -4,7 +4,7 @@
 # usa Jedis. O fat jar (Jedis/commons-pool2/redis-authx embutidos via maven-shade)
 # é compilado no primeiro estágio a partir do repositório, pinado em REDIS_CACHE_REF,
 # e copiado para /opt/keycloak/providers no estágio final.
-ARG KEYCLOAK_VERSION=26.7.4
+ARG KEYCLOAK_VERSION=26.8.1
 ARG REDIS_CACHE_REF=fe7b735731a188119546cae695efd302fe030c53
 
 # --- estágio 1: build do fat jar da extensão ---
